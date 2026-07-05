@@ -376,48 +376,56 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYIDTXGLyACpvj5SZsI
     reader.readAsDataURL(file);
   };
 
-  // إضافة منشور
-  document.getElementById("addPostBtn").onclick = async function() {
-    if (!selectedMonthId) return showToast("اختر شهراً", "error");
-    if (!uploadedImage) return showToast("ارفع صورة", "error");
-    const caption = document.getElementById("postCaption").value.trim();
-    const postId = "POST-" + Date.now();
-    
-    // ✅ نرسل الصورة أولاً، ثم نضيف المنشور
-    const res = await callScript({ 
-      action: "addPost", 
-      postId: postId, 
-      monthId: selectedMonthId, 
-      imageUrl: uploadedImage.substring(0, 500), // نرسل جزء من الصورة فقط
-      caption: caption.substring(0, 200) // نرسل جزء من النص
-    });
-
-  // تحميل المنشورات
-  async function loadPosts(monthId) {
-    const res = await callScript({ action: "getPosts", monthId });
-    if (res.status === "success") {
-      posts = res.posts || [];
-      renderPosts();
-    }
+ // إضافة منشور
+document.getElementById("addPostBtn").onclick = async function() {
+  if (!selectedMonthId) return showToast("اختر شهراً", "error");
+  if (!uploadedImage) return showToast("ارفع صورة", "error");
+  const caption = document.getElementById("postCaption").value.trim();
+  const postId = "POST-" + Date.now();
+  const res = await callScript({ 
+    action: "addPost", 
+    postId: postId, 
+    monthId: selectedMonthId, 
+    imageUrl: uploadedImage, 
+    caption: caption 
+  });
+  if (res.status === "success") {
+    showToast("تم إضافة المنشور", "success");
+    document.getElementById("postCaption").value = "";
+    document.getElementById("imagePreview").innerHTML = "";
+    uploadedImage = null;
+    loadPosts(selectedMonthId);
+  } else {
+    showToast("فشل الإضافة", "error");
   }
+};
 
-  function renderPosts() {
-    const tbody = document.getElementById("postsTable");
-    tbody.innerHTML = posts.map(p => `
-      <tr>
-        <td><img src="${p.imageUrl}" class="preview-img" style="width:60px;height:60px;" /></td>
-        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">${p.caption || ''}</td>
-        <td><span class="status-badge" style="background:${p.status === 'approved' ? '#d1fae5' : p.status === 'rejected' ? '#fee2e2' : '#fef3c7'};color:${p.status === 'approved' ? '#065f46' : p.status === 'rejected' ? '#991b1b' : '#92400e'};">${p.status === 'approved' ? '✅ معتمد' : p.status === 'rejected' ? '❌ مرفوض' : '⏳ قيد المراجعة'}</span></td>
-        <td>${p.adminNote || '—'}</td>
-        <td>${p.clientNote || '—'}</td>
-        <td>
-          <button class="btn btn-success" style="padding:4px 8px;font-size:0.7rem;" onclick="updateStatus('${p.postId}','approved')">✅</button>
-          <button class="btn btn-danger" style="padding:4px 8px;font-size:0.7rem;" onclick="updateStatus('${p.postId}','rejected')">❌</button>
-          <button class="btn btn-outline" style="padding:4px 8px;font-size:0.7rem;" onclick="addAdminNote('${p.postId}')">✏️</button>
-        </td>
-      </tr>
-    `).join("");
+// تحميل المنشورات
+async function loadPosts(monthId) {
+  const res = await callScript({ action: "getPosts", monthId });
+  if (res.status === "success") {
+    posts = res.posts || [];
+    renderPosts();
   }
+}
+
+function renderPosts() {
+  const tbody = document.getElementById("postsTable");
+  tbody.innerHTML = posts.map(p => `
+    <tr>
+      <td><img src="${p.imageUrl}" class="preview-img" style="width:60px;height:60px;" /></td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">${p.caption || ''}</td>
+      <td><span class="status-badge" style="background:${p.status === 'approved' ? '#d1fae5' : p.status === 'rejected' ? '#fee2e2' : '#fef3c7'};color:${p.status === 'approved' ? '#065f46' : p.status === 'rejected' ? '#991b1b' : '#92400e'};">${p.status === 'approved' ? '✅ معتمد' : p.status === 'rejected' ? '❌ مرفوض' : '⏳ قيد المراجعة'}</span></td>
+      <td>${p.adminNote || '—'}</td>
+      <td>${p.clientNote || '—'}</td>
+      <td>
+        <button class="btn btn-success" style="padding:4px 8px;font-size:0.7rem;" onclick="updateStatus('${p.postId}','approved')">✅</button>
+        <button class="btn btn-danger" style="padding:4px 8px;font-size:0.7rem;" onclick="updateStatus('${p.postId}','rejected')">❌</button>
+        <button class="btn btn-outline" style="padding:4px 8px;font-size:0.7rem;" onclick="addAdminNote('${p.postId}')">✏️</button>
+      </td>
+    </tr>
+  `).join("");
+}
 
   async function updateStatus(postId, status) {
     await callScript({ action: "updatePostStatus", postId, status });
