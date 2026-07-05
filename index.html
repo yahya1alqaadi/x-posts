@@ -382,15 +382,15 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYIDTXGLyACpvj5SZsI
     if (!uploadedImage) return showToast("ارفع صورة", "error");
     const caption = document.getElementById("postCaption").value.trim();
     const postId = "POST-" + Date.now();
-    const res = await callScript({ action: "addPost", postId, monthId: selectedMonthId, imageUrl: uploadedImage, caption });
-    if (res.status === "success") {
-      showToast("تم إضافة المنشور", "success");
-      document.getElementById("postCaption").value = "";
-      document.getElementById("imagePreview").innerHTML = "";
-      uploadedImage = null;
-      loadPosts(selectedMonthId);
-    }
-  };
+    
+    // ✅ نرسل الصورة أولاً، ثم نضيف المنشور
+    const res = await callScript({ 
+      action: "addPost", 
+      postId: postId, 
+      monthId: selectedMonthId, 
+      imageUrl: uploadedImage.substring(0, 500), // نرسل جزء من الصورة فقط
+      caption: caption.substring(0, 200) // نرسل جزء من النص
+    });
 
   // تحميل المنشورات
   async function loadPosts(monthId) {
