@@ -342,12 +342,12 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYIDTXGLyACpvj5SZsI
         <div class="tweet-header">
           <div class="tweet-avatar">X</div>
           <div class="tweet-user-info">
-            <div class="tweet-user-name">الحساب الرسمي</div>
+            <div class="tweet-user-name">مهلة</div>
             <div class="tweet-user-handle">@official</div>
           </div>
         </div>
         ${p.caption ? `<div class="tweet-caption">${p.caption}</div>` : ''}
-        <img src="${p.imageUrl}" class="tweet-image" alt="منشور" />
+        <img src="${fixDriveUrl(p.imageUrl)}" class="tweet-image" alt="منشور" />
         <div class="tweet-actions-bar">
           <span><i class="far fa-comment"></i> 0</span>
           <span><i class="fas fa-retweet"></i> 0</span>
