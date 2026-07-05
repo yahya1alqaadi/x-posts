@@ -330,20 +330,38 @@
     }
   };
 
-  document.getElementById("addPostBtn").onclick = async function() {
-    if (!selectedMonthId) return showToast("اختر شهراً", "error");
-    const imageUrl = document.getElementById("imageUrl").value.trim();
-    const caption = document.getElementById("postCaption").value.trim();
-    if (!imageUrl) return showToast("الصق رابط الصورة", "error");
-    const postId = "POST-" + Date.now();
-    const res = await callScript({ action: "addPost", postId, monthId: selectedMonthId, imageUrl, caption });
-    if (res.status === "success") {
-      showToast("تم إضافة المنشور", "success");
-      document.getElementById("imageUrl").value = "";
-      document.getElementById("postCaption").value = "";
-      loadPosts(selectedMonthId);
-    } else { showToast("فشل الإضافة", "error"); }
-  };
+ document.getElementById("addPostBtn").onclick = async function() {
+  if (!selectedMonthId) return showToast("اختر شهراً", "error");
+  
+  const imageUrl = document.getElementById("imageUrl").value.trim();
+  const fileInput = document.getElementById("imageFile");
+  const file = fileInput.files[0];
+  const caption = document.getElementById("postCaption").value.trim();
+  
+  let finalImageUrl = imageUrl;
+  
+  // إذا رفع صورة، نحولها لـ base64
+  if (file) {
+    finalImageUrl = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  }
+  
+  if (!finalImageUrl) return showToast("ارفع صورة أو الصق رابط", "error");
+  
+  const postId = "POST-" + Date.now();
+  const res = await callScript({ action: "addPost", postId, monthId: selectedMonthId, imageUrl: finalImageUrl, caption });
+  if (res.status === "success") {
+    showToast("تم إضافة المنشور", "success");
+    document.getElementById("imageUrl").value = "";
+    document.getElementById("imageFile").value = "";
+    document.getElementById("postCaption").value = "";
+    document.getElementById("imagePreview").innerHTML = "";
+    loadPosts(selectedMonthId);
+  } else { showToast("فشل الإضافة", "error"); }
+};
 
   async function loadPosts(monthId) {
     const res = await callScript({ action: "getPosts", monthId });
