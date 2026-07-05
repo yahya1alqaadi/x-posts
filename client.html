@@ -309,7 +309,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYIDTXGLyACpvj5SZsI
 function getFullUrl(url) {
   if (!url) return "";
   if (url.startsWith("DRIVE:")) {
-    return "https://lh3.googleusercontent.com/d/" + url.replace("DRIVE:", "") + "=w1200";
+    return "https://lh3.googleusercontent.com/d/" + url.replace("DRIVE:", "") + "=s0";
   }
   return url;
 }
