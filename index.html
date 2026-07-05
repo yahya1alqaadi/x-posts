@@ -382,7 +382,17 @@ document.getElementById("addPostBtn").onclick = async function() {
       }
     }
   }
-  
+    const postId = "POST-" + Date.now();
+  const res = await callScript({ action: "addPost", postId, monthId: selectedMonthId, imageUrl: finalImageUrl, caption });
+  if (res.status === "success") {
+    showToast("تم إضافة المنشور", "success");
+    document.getElementById("imageUrl").value = "";
+    if (fileInput) fileInput.value = "";
+    document.getElementById("postCaption").value = "";
+    document.getElementById("imagePreview").innerHTML = "";
+    loadPosts(selectedMonthId);
+  } else { showToast("فشل الإضافة", "error"); }
+};
   if (!finalImageUrl) return showToast("ارفع صورة أو الصق رابط", "error");
   
   const postId = "POST-" + Date.now();
