@@ -343,66 +343,27 @@ document.getElementById("addPostBtn").onclick = async function() {
   if (!selectedMonthId) return showToast("اختر شهراً", "error");
   
   const imageUrl = document.getElementById("imageUrl").value.trim();
-  const fileInput = document.getElementById("imageFile");
-  const file = fileInput ? fileInput.files[0] : null;
   const caption = document.getElementById("postCaption").value.trim();
   
-  let finalImageUrl = imageUrl;
+  if (!imageUrl) return showToast("الصق رابط الصورة", "error");
   
-  if (file) {
-    showToast("⏳ جاري رفع الصورة إلى Google Drive...", "warning");
-    
-    try {
-      // نضغط الصورة بشكل معقول (جودة 60%)
-      const compressed = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const img = new Image();
-          img.onload = function() {
-            const canvas = document.createElement("canvas");
-            const maxW = 1200, maxH = 1200;
-            let w = img.width, h = img.height;
-            if (w > maxW || h > maxH) {
-              if (w > h) { h = (h / w) * maxW; w = maxW; }
-              else { w = (w / h) * maxH; h = maxH; }
-            }
-            canvas.width = w; canvas.height = h;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, w, h);
-            resolve(canvas.toDataURL("image/jpeg", 0.6));
-          };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
-      
-      // نرسل الصورة على أجزاء
-      const parts = compressed.match(/.{1,1500}/g) || [];
-      const uploadRes = await callScript({ 
-        action: "uploadImageChunked", 
-        fileName: file.name.replace(/[^a-zA-Z0-9]/g, "_") + ".jpg",
-        totalParts: parts.length,
-        part1: parts[0] || "",
-        part2: parts[1] || "",
-        part3: parts[2] || "",
-        part4: parts[3] || "",
-        part5: parts[4] || ""
-      });
-      
-      if (uploadRes.status === "success") {
-        finalImageUrl = uploadRes.url;
-        showToast("✅ تم رفع الصورة", "success");
-      } else {
-        showToast("فشل الرفع - استخدم رابط ImgBB", "error");
-        return;
-      }
-    } catch(e) {
-      showToast("خطأ - استخدم رابط ImgBB", "error");
-      return;
-    }
+  // ✅ نرسل ID الصورة فقط إذا كان رابط Drive
+  let finalUrl = imageUrl;
+  if (imageUrl.includes("drive.google.com") || imageUrl.includes("lh3.googleusercontent.com")) {
+    const id = imageUrl.match(/\/d\/([^\/]+)/)?.[1];
+    if (id) finalUrl = "DRIVE:" + id;
   }
   
-  if (!finalImageUrl) return showToast("ارفع صورة أو الصق رابط", "error");
+  const postId = "POST-" + Date.now();
+  const res = await callScript({ action: "addPost", postId, monthId: selectedMonthId, imageUrl: finalUrl, caption });
+  if (res.status === "success") {
+    showToast("تم إضافة المنشور", "success");
+    document.getElementById("imageUrl").value = "";
+    document.getElementById("postCaption").value = "";
+    loadPosts(selectedMonthId);
+  } else { showToast("فشل الإضافة", "error"); }
+};
+  
   
   const postId = "POST-" + Date.now();
   const res = await callScript({ action: "addPost", postId, monthId: selectedMonthId, imageUrl: finalImageUrl, caption });
