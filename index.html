@@ -424,7 +424,12 @@ function compressImage(file) {
       </tr>
     `).join("");
   }
-
+function getFullUrl(url) {
+  if (url && url.startsWith("DRIVE:")) {
+    return "https://lh3.googleusercontent.com/d/" + url.replace("DRIVE:", "") + "=w500";
+  }
+  return url;
+}
   async function editPost(postId) {
     const post = posts.find(p => p.postId === postId);
     if (!post) return;
