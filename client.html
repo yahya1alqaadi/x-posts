@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مراجعة المحتوى | منصة إكس</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    :root {
+      --primary: #1d9bf0;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --dark: #0f172a;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-400: #94a3b8;
+      --gray-500: #64748b;
+      --gray-700: #334155;
+      --radius: 20px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: white;
+      padding: 1rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .header h1 i { color: var(--primary); }
+
+    main {
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .month-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .month-card {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 14px;
+      border: 2px solid #e2e8f0;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      font-weight: 700;
+    }
+
+    .month-card:hover {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .month-card.active {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .month-card i {
+      font-size: 1.5rem;
+      color: var(--primary);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    /* ✅ شكل منشور إكس */
+    .tweet-card {
+      background: white;
+      border: 1px solid #cfd9de;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
+      transition: box-shadow 0.2s;
+    }
+
+    .tweet-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .tweet-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .tweet-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1d9bf0, #0f172a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+
+    .tweet-user-info {
+      flex: 1;
+    }
+
+    .tweet-user-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .tweet-user-handle {
+      color: #536471;
+      font-size: 0.85rem;
+    }
+
+    .tweet-image {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid #cfd9de;
+      margin-bottom: 10px;
+    }
+
+    .tweet-caption {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 12px;
+      color: #0f1419;
+    }
+
+    .tweet-actions-bar {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-top: 1px solid #eff3f4;
+      color: #536471;
+      font-size: 0.85rem;
+    }
+
+    .tweet-actions-bar span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* أزرار المراجعة */
+    .review-bar {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-approve { background: #10b981; color: white; }
+    .btn-approve:hover { background: #059669; }
+    .btn-reject { background: #ef4444; color: white; }
+    .btn-reject:hover { background: #dc2626; }
+    .btn-note { background: #f59e0b; color: white; }
+    .btn-note:hover { background: #d97706; }
+    .btn-approved { background: #d1fae5; color: #065f46; cursor: default; }
+    .btn-rejected { background: #fee2e2; color: #991b1b; cursor: default; }
+
+    .note-box {
+      background: #fef3c7;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      margin-top: 8px;
+      color: #92400e;
+    }
+
+    .back-btn {
+      background: white;
+      border: 2px solid #cbd5e1;
+      padding: 10px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      padding: 14px 24px;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+      to { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <h1><i class="fab fa-x-twitter"></i> مراجعة المحتوى</h1>
+</header>
+
+<main>
+  <!-- عرض الأشهر -->
+  <section class="card" id="monthsSection">
+    <h2><i class="fas fa-calendar"></i> اختر الشهر</h2>
+    <div class="month-grid" id="monthsGrid"></div>
+  </section>
+
+  <!-- عرض المنشورات -->
+  <section id="postsSection" style="display:none;">
+    <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-right"></i> الرجوع للأشهر</button>
+    <div id="postsContainer"></div>
+  </section>
+</main>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYxN0rg17p8XMJur2kgoMAN6kltUFm3T9odnzEy-BuqqRf2KH1_JzTMm6aFDtmNLtn/exec";
+  let months = [];
+  let posts = [];
+
+  function showToast(msg, type) {
+    const t = document.createElement("div");
+    t.className = "toast";
+    t.style.background = type === "success" ? "#10b981" : type === "error" ? "#ef4444" : "#f59e0b";
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
+  }
+
+  function callScript(params) {
+    return new Promise((resolve, reject) => {
+      const cb = "cb_" + Date.now();
+      params.callback = cb;
+      const q = new URLSearchParams(params).toString();
+      const s = document.createElement("script");
+      window[cb] = d => { resolve(d); delete window[cb]; s.remove(); };
+      s.onerror = () => { reject(); delete window[cb]; s.remove(); };
+      s.src = SCRIPT_URL + "?" + q;
+      document.body.appendChild(s);
+    });
+  }
+
+  async function loadMonths() {
+    const res = await callScript({ action: "getMonths" });
+    if (res.status === "success") {
+      months = res.months || [];
+      renderMonths();
+    }
+  }
+
+  function renderMonths() {
+    document.getElementById("monthsGrid").innerHTML = months.map(m => `
+      <div class="month-card" onclick="selectMonth('${m.monthId}')">
+        <i class="fas fa-folder"></i>
+        ${m.monthName}
+      </div>
+    `).join("");
+  }
+
+  async function selectMonth(monthId) {
+    const res = await callScript({ action: "getPosts", monthId });
+    if (res.status === "success") {
+      posts = res.posts || [];
+      document.getElementById("monthsSection").style.display = "none";
+      document.getElementById("postsSection").style.display = "";
+      renderPosts();
+    }
+  }
+
+  function goBack() {
+    document.getElementById("monthsSection").style.display = "";
+    document.getElementById("postsSection").style.display = "none";
+  }
+
+  function renderPosts() {
+    document.getElementById("postsContainer").innerHTML = posts.map(p => `
+      <div class="tweet-card">
+        <div class="tweet-header">
+          <div class="tweet-avatar">X</div>
+          <div class="tweet-user-info">
+            <div class="tweet-user-name">الحساب الرسمي</div>
+            <div class="tweet-user-handle">@official</div>
+          </div>
+        </div>
+        ${p.caption ? `<div class="tweet-caption">${p.caption}</div>` : ''}
+        <img src="${p.imageUrl}" class="tweet-image" alt="منشور" />
+        <div class="tweet-actions-bar">
+          <span><i class="far fa-comment"></i> 0</span>
+          <span><i class="fas fa-retweet"></i> 0</span>
+          <span><i class="far fa-heart"></i> 0</span>
+          <span><i class="far fa-bookmark"></i></span>
+          <span><i class="fas fa-upload"></i></span>
+        </div>
+        ${p.clientNote ? `<div class="note-box">📝 ${p.clientNote}</div>` : ''}
+        ${p.adminNote ? `<div class="note-box" style="background:#dbeafe;color:#1e40af;">👤 الأدمن: ${p.adminNote}</div>` : ''}
+        <div class="review-bar">
+          ${p.status === 'approved' ? '<span class="btn btn-approved">✅ معتمد</span>' : ''}
+          ${p.status === 'rejected' ? '<span class="btn btn-rejected">❌ مرفوض</span>' : ''}
+          ${p.status === 'pending' ? `
+            <button class="btn btn-approve" onclick="updateStatus('${p.postId}','approved')"><i class="fas fa-check"></i> اعتماد</button>
+            <button class="btn btn-reject" onclick="updateStatus('${p.postId}','rejected')"><i class="fas fa-times"></i> رفض</button>
+            <button class="btn btn-note" onclick="addClientNote('${p.postId}')"><i class="fas fa-pen"></i> ملاحظة</button>
+          ` : ''}
+        </div>
+      </div>
+    `).join("");
+  }
+
+  async function updateStatus(postId, status) {
+    await callScript({ action: "updatePostStatus", postId, status });
+    // إعادة تحميل نفس الشهر
+    const monthId = posts[0]?.monthId;
+    if (monthId) selectMonth(monthId);
+    showToast(status === 'approved' ? "✅ تم الاعتماد" : "❌ تم الرفض", status === 'approved' ? "success" : "error");
+  }
+
+  async function addClientNote(postId) {
+    const note = prompt("أدخل ملاحظتك:");
+    if (note === null) return;
+    await callScript({ action: "addNote", postId, note, isAdmin: "no" });
+    const monthId = posts[0]?.monthId;
+    if (monthId) selectMonth(monthId);
+    showToast("📝 تم إضافة الملاحظة", "success");
+  }
+
+  loadMonths();
+</script>
+</body>
+</html>
