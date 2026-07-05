@@ -46,18 +46,11 @@
       z-index: 100;
     }
 
-    .header h1 {
-      font-size: 1.3rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .header h1 { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
     .header h1 i { color: #2563eb; }
 
     main {
-      max-width: 1200px;
+      max-width: 1100px;
       margin: 2rem auto;
       padding: 0 1rem;
       display: grid;
@@ -71,15 +64,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
 
-    .card h2 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .card h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
     .card h2 i { color: #2563eb; }
 
     .form-row {
@@ -96,27 +81,20 @@
       font-size: 0.95rem;
       font-family: inherit;
       flex: 1;
-      min-width: 180px;
+      min-width: 150px;
     }
 
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: #2563eb;
-    }
-
-    textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: #2563eb; }
+    textarea { min-height: 80px; resize: vertical; }
 
     .btn {
-      padding: 10px 18px;
+      padding: 8px 16px;
       border: none;
       border-radius: 10px;
       font-weight: 700;
       cursor: pointer;
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -127,61 +105,28 @@
     .btn-primary { background: #2563eb; color: white; }
     .btn-primary:hover { background: #1d4ed8; }
     .btn-success { background: #10b981; color: white; }
-    .btn-warning { background: #f59e0b; color: white; }
+    .btn-success:hover { background: #059669; }
     .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-warning { background: #f59e0b; color: white; }
     .btn-outline { background: white; border: 2px solid #cbd5e1; color: #334155; }
+    .btn-sm { padding: 4px 8px; font-size: 0.7rem; border-radius: 6px; }
 
-    .image-upload-area {
-      border: 2px dashed #cbd5e1;
-      border-radius: 12px;
-      padding: 30px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.2s;
-      margin-bottom: 12px;
-    }
-
-    .image-upload-area:hover { border-color: #2563eb; }
-
-    .image-upload-area i { font-size: 2rem; color: #94a3b8; }
-    .image-upload-area p { color: #64748b; margin-top: 8px; }
-
-    .preview-img {
-      max-width: 200px;
-      max-height: 200px;
-      border-radius: 10px;
-      margin: 8px;
-      object-fit: cover;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th, td {
-      padding: 10px;
-      text-align: center;
-      border-bottom: 1px solid #e2e8f0;
-      font-size: 0.85rem;
-    }
-
-    th {
-      background: #f8fafc;
-      font-weight: 700;
-      color: #475569;
-    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px; text-align: center; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; }
+    th { background: #f8fafc; font-weight: 700; color: #475569; }
 
     .status-badge {
       padding: 4px 12px;
       border-radius: 20px;
       font-size: 0.75rem;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .month-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 12px;
     }
 
@@ -192,16 +137,16 @@
       border: 1px solid #e2e8f0;
       cursor: pointer;
       transition: all 0.2s;
+      position: relative;
     }
 
-    .month-card:hover {
-      border-color: #2563eb;
-      box-shadow: 0 4px 12px rgba(37,99,235,0.1);
-    }
+    .month-card:hover { border-color: #2563eb; box-shadow: 0 4px 12px rgba(37,99,235,0.1); }
+    .month-card.active { border-color: #2563eb; background: #eff6ff; }
 
-    .month-card.active {
-      border-color: #2563eb;
-      background: #eff6ff;
+    .month-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
     }
 
     .toast {
@@ -221,6 +166,8 @@
       from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
       to { transform: translateX(-50%) translateY(0); opacity: 1; }
     }
+
+    .info-text { font-size: 0.8rem; color: #64748b; margin-bottom: 8px; }
   </style>
 </head>
 <body>
@@ -238,8 +185,8 @@
   <section class="card">
     <h2><i class="fas fa-plus-circle"></i> إضافة شهر جديد</h2>
     <div class="form-row">
-      <input type="text" id="monthId" placeholder="معرف الشهر (مثلاً: JUL2025)">
-      <input type="text" id="monthName" placeholder="اسم الشهر (مثلاً: يوليو 2025)">
+      <input type="text" id="monthId" placeholder="معرف الشهر (JUL2025)">
+      <input type="text" id="monthName" placeholder="اسم الشهر (يوليو 2025)">
       <input type="text" id="monthCaption" placeholder="نص تعريفي للشهر">
       <button class="btn btn-primary" id="addMonthBtn"><i class="fas fa-plus"></i> إضافة</button>
     </div>
@@ -254,12 +201,10 @@
   <!-- إضافة منشور -->
   <section class="card" id="postSection" style="display:none;">
     <h2><i class="fas fa-image"></i> إضافة منشور - <span id="selectedMonthLabel"></span></h2>
-    <div class="image-upload-area" id="imageUploadArea">
-      <i class="fas fa-cloud-upload-alt"></i>
-      <p>اضغط هنا لرفع الصورة</p>
-      <input type="file" id="imageInput" accept="image/*" style="display:none;">
+    <p class="info-text">📎 الصق رابط الصورة من Google Drive أو أي رابط مباشر</p>
+    <div class="form-row">
+      <input type="text" id="imageUrl" placeholder="رابط الصورة">
     </div>
-    <div id="imagePreview" style="margin-bottom:12px;"></div>
     <div class="form-row">
       <textarea id="postCaption" placeholder="نص المنشور (الكابشن)"></textarea>
     </div>
@@ -289,10 +234,8 @@
 </main>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYIDTXGLyACpvj5SZsIvz3Wr0VDdkfC__JSTIe7nkzK4K-nGI6BCpGmQvxdjJani_wRw/exec";
-
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYIDTXGLyACpvj5SZsIvz3Wr0VDdkfC__JSTIe7nkzK4K-nGI6BCpGmQvxdjJani_wRw/exec";
   let selectedMonthId = null;
-  let uploadedImage = null;
   let months = [];
   let posts = [];
 
@@ -318,23 +261,44 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYIDTXGLyACpvj5SZsI
     });
   }
 
-  // تحميل الأشهر
   async function loadMonths() {
     const res = await callScript({ action: "getMonths" });
-    if (res.status === "success") {
-      months = res.months || [];
-      renderMonths();
-    }
+    if (res.status === "success") { months = res.months || []; renderMonths(); }
   }
 
   function renderMonths() {
-    const grid = document.getElementById("monthsGrid");
-    grid.innerHTML = months.map(m => `
+    document.getElementById("monthsGrid").innerHTML = months.map(m => `
       <div class="month-card ${selectedMonthId === m.monthId ? 'active' : ''}" onclick="selectMonth('${m.monthId}')">
         <strong>${m.monthName}</strong>
         <p style="font-size:0.8rem;color:#64748b;">${m.caption || ''}</p>
+        <div class="month-actions" onclick="event.stopPropagation()">
+          <button class="btn btn-warning btn-sm" onclick="editMonth('${m.monthId}')"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="deleteMonth('${m.monthId}')"><i class="fas fa-trash"></i></button>
+        </div>
       </div>
     `).join("");
+  }
+
+  async function editMonth(monthId) {
+    const month = months.find(m => m.monthId === monthId);
+    if (!month) return;
+    const newName = prompt("اسم الشهر الجديد:", month.monthName);
+    if (!newName) return;
+    const newCaption = prompt("النص التعريفي الجديد:", month.caption);
+    if (newCaption === null) return;
+    await callScript({ action: "updateMonth", monthId, monthName: newName, caption: newCaption });
+    showToast("تم تعديل الشهر", "success");
+    loadMonths();
+  }
+
+  async function deleteMonth(monthId) {
+    if (!confirm("حذف الشهر وجميع منشوراته؟")) return;
+    await callScript({ action: "deleteMonth", monthId });
+    if (selectedMonthId === monthId) selectedMonthId = null;
+    showToast("تم حذف الشهر", "success");
+    loadMonths();
+    document.getElementById("postSection").style.display = "none";
+    document.getElementById("postsListSection").style.display = "none";
   }
 
   function selectMonth(monthId) {
@@ -347,7 +311,6 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYIDTXGLyACpvj5SZsI
     loadPosts(monthId);
   }
 
-  // إضافة شهر
   document.getElementById("addMonthBtn").onclick = async function() {
     const id = document.getElementById("monthId").value.trim();
     const name = document.getElementById("monthName").value.trim();
@@ -363,75 +326,63 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYIDTXGLyACpvj5SZsI
     }
   };
 
-  // رفع الصورة
-  document.getElementById("imageUploadArea").onclick = () => document.getElementById("imageInput").click();
-  document.getElementById("imageInput").onchange = function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    uploadedImage = ev.target.result;
-    document.getElementById("imagePreview").innerHTML = `<img src="${uploadedImage}" class="preview-img" />`;
-  };
-  reader.readAsDataURL(file);
-};
-
-
- // إضافة منشور
-document.getElementById("addPostBtn").onclick = async function() {
-  if (!selectedMonthId) return showToast("اختر شهراً", "error");
-  if (!uploadedImage) return showToast("ارفع صورة", "error");
-  const caption = document.getElementById("postCaption").value.trim();
-  const postId = "POST-" + Date.now();
-  
-  try {
-    const res = await callScript({ 
-      action: "addPost", 
-      postId: postId, 
-      monthId: selectedMonthId, 
-      imageUrl: "data:image/jpeg;base64," + uploadedImage.split(",")[1], 
-      caption: caption 
-    });
+  document.getElementById("addPostBtn").onclick = async function() {
+    if (!selectedMonthId) return showToast("اختر شهراً", "error");
+    const imageUrl = document.getElementById("imageUrl").value.trim();
+    const caption = document.getElementById("postCaption").value.trim();
+    if (!imageUrl) return showToast("الصق رابط الصورة", "error");
+    const postId = "POST-" + Date.now();
+    const res = await callScript({ action: "addPost", postId, monthId: selectedMonthId, imageUrl, caption });
     if (res.status === "success") {
       showToast("تم إضافة المنشور", "success");
+      document.getElementById("imageUrl").value = "";
       document.getElementById("postCaption").value = "";
-      document.getElementById("imagePreview").innerHTML = "";
-      uploadedImage = null;
       loadPosts(selectedMonthId);
-    } else {
-      showToast("فشل: " + (res.message || "خطأ غير معروف"), "error");
-    }
-  } catch(e) {
-    showToast("خطأ في الاتصال", "error");
-  }
-};
+    } else { showToast("فشل الإضافة", "error"); }
+  };
 
-// تحميل المنشورات
-async function loadPosts(monthId) {
-  const res = await callScript({ action: "getPosts", monthId });
-  if (res.status === "success") {
-    posts = res.posts || [];
-    renderPosts();
+  async function loadPosts(monthId) {
+    const res = await callScript({ action: "getPosts", monthId });
+    if (res.status === "success") { posts = res.posts || []; renderPosts(); }
   }
-}
 
-function renderPosts() {
-  const tbody = document.getElementById("postsTable");
-  tbody.innerHTML = posts.map(p => `
-    <tr>
-      <td><img src="${p.imageUrl}" class="preview-img" style="width:60px;height:60px;" /></td>
-      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">${p.caption || ''}</td>
-      <td><span class="status-badge" style="background:${p.status === 'approved' ? '#d1fae5' : p.status === 'rejected' ? '#fee2e2' : '#fef3c7'};color:${p.status === 'approved' ? '#065f46' : p.status === 'rejected' ? '#991b1b' : '#92400e'};">${p.status === 'approved' ? '✅ معتمد' : p.status === 'rejected' ? '❌ مرفوض' : '⏳ قيد المراجعة'}</span></td>
-      <td>${p.adminNote || '—'}</td>
-      <td>${p.clientNote || '—'}</td>
-      <td>
-        <button class="btn btn-success" style="padding:4px 8px;font-size:0.7rem;" onclick="updateStatus('${p.postId}','approved')">✅</button>
-        <button class="btn btn-danger" style="padding:4px 8px;font-size:0.7rem;" onclick="updateStatus('${p.postId}','rejected')">❌</button>
-        <button class="btn btn-outline" style="padding:4px 8px;font-size:0.7rem;" onclick="addAdminNote('${p.postId}')">✏️</button>
-      </td>
-    </tr>
-  `).join("");
-}
+  function renderPosts() {
+    document.getElementById("postsTable").innerHTML = posts.map(p => `
+      <tr>
+        <td><img src="${p.imageUrl}" style="width:60px;height:60px;border-radius:6px;object-fit:cover;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23e2e8f0%22 width=%2260%22 height=%2260%22/><text fill=%22%2394a3b8%22 x=%2230%22 y=%2235%22 text-anchor=%22middle%22>🖼</text></svg>'" /></td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">${p.caption || ''}</td>
+        <td><span class="status-badge" style="background:${p.status === 'approved' ? '#d1fae5' : p.status === 'rejected' ? '#fee2e2' : '#fef3c7'};color:${p.status === 'approved' ? '#065f46' : p.status === 'rejected' ? '#991b1b' : '#92400e'};">${p.status === 'approved' ? '✅ معتمد' : p.status === 'rejected' ? '❌ مرفوض' : '⏳ مراجعة'}</span></td>
+        <td>${p.adminNote || '—'}</td>
+        <td>${p.clientNote || '—'}</td>
+        <td>
+          <button class="btn btn-sm btn-success" onclick="updateStatus('${p.postId}','approved')">✅</button>
+          <button class="btn btn-sm btn-danger" onclick="updateStatus('${p.postId}','rejected')">❌</button>
+          <button class="btn btn-sm btn-warning" onclick="editPost('${p.postId}')"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-sm btn-outline" onclick="addAdminNote('${p.postId}')">✏️</button>
+          <button class="btn btn-sm btn-danger" onclick="deletePost('${p.postId}')"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  async function editPost(postId) {
+    const post = posts.find(p => p.postId === postId);
+    if (!post) return;
+    const newUrl = prompt("رابط الصورة الجديد:", post.imageUrl);
+    if (newUrl === null) return;
+    const newCaption = prompt("النص الجديد:", post.caption);
+    if (newCaption === null) return;
+    await callScript({ action: "updatePost", postId, imageUrl: newUrl, caption: newCaption });
+    showToast("تم تعديل المنشور", "success");
+    loadPosts(selectedMonthId);
+  }
+
+  async function deletePost(postId) {
+    if (!confirm("حذف هذا المنشور؟")) return;
+    await callScript({ action: "deletePost", postId });
+    showToast("تم حذف المنشور", "success");
+    loadPosts(selectedMonthId);
+  }
 
   async function updateStatus(postId, status) {
     await callScript({ action: "updatePostStatus", postId, status });
