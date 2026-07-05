@@ -365,37 +365,17 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYIDTXGLyACpvj5SZsI
 
   // رفع الصورة
   document.getElementById("imageUploadArea").onclick = () => document.getElementById("imageInput").click();
- document.getElementById("imageInput").onchange = function(e) {
+  document.getElementById("imageInput").onchange = function(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = function(ev) {
-    // ✅ ضغط الصورة إلى حجم أصغر
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement("canvas");
-      const maxWidth = 800;
-      const maxHeight = 800;
-      let w = img.width;
-      let h = img.height;
-      
-      if (w > maxWidth || h > maxHeight) {
-        if (w > h) { h = (h / w) * maxWidth; w = maxWidth; }
-        else { w = (w / h) * maxHeight; h = maxHeight; }
-      }
-      
-      canvas.width = w;
-      canvas.height = h;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, w, h);
-      
-      uploadedImage = canvas.toDataURL("image/jpeg", 0.6);
-      document.getElementById("imagePreview").innerHTML = `<img src="${uploadedImage}" class="preview-img" />`;
-    };
-    img.src = ev.target.result;
+    uploadedImage = ev.target.result;
+    document.getElementById("imagePreview").innerHTML = `<img src="${uploadedImage}" class="preview-img" />`;
   };
   reader.readAsDataURL(file);
 };
+
 
  // إضافة منشور
 document.getElementById("addPostBtn").onclick = async function() {
