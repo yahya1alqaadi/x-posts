@@ -404,7 +404,7 @@ function compressImage(file) {
   function renderPosts() {
     document.getElementById("postsTable").innerHTML = posts.map(p => `
       <tr>
-        <td><img src="${fixDriveUrl(p.imageUrl)}"&sz=w500" style="width:60px;height:60px;border-radius:6px;object-fit:cover;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23e2e8f0%22 width=%2260%22 height=%2260%22/><text fill=%22%2394a3b8%22 x=%2230%22 y=%2235%22 text-anchor=%22middle%22>🖼</text></svg>'" /></td>
+        <td><img src="${getFullUrl(p.imageUrl)}""&sz=w500" style="width:60px;height:60px;border-radius:6px;object-fit:cover;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23e2e8f0%22 width=%2260%22 height=%2260%22/><text fill=%22%2394a3b8%22 x=%2230%22 y=%2235%22 text-anchor=%22middle%22>🖼</text></svg>'" /></td>
         <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">${p.caption || ''}</td>
         <td><span class="status-badge" style="background:${p.status === 'approved' ? '#d1fae5' : p.status === 'rejected' ? '#fee2e2' : '#fef3c7'};color:${p.status === 'approved' ? '#065f46' : p.status === 'rejected' ? '#991b1b' : '#92400e'};">${p.status === 'approved' ? '✅ معتمد' : p.status === 'rejected' ? '❌ مرفوض' : '⏳ مراجعة'}</span></td>
         <td>${p.adminNote || '—'}</td>
