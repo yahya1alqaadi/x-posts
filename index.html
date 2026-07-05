@@ -364,17 +364,6 @@ document.getElementById("addPostBtn").onclick = async function() {
   } else { showToast("فشل الإضافة", "error"); }
 };
   
-  
-  const postId = "POST-" + Date.now();
-  const res = await callScript({ action: "addPost", postId, monthId: selectedMonthId, imageUrl: finalImageUrl, caption });
-  if (res.status === "success") {
-    showToast("تم إضافة المنشور", "success");
-    document.getElementById("imageUrl").value = "";
-    if (fileInput) fileInput.value = "";
-    document.getElementById("postCaption").value = "";
-    loadPosts(selectedMonthId);
-  } else { showToast("فشل الإضافة", "error"); }
-};
 
 function compressImage(file) {
   return new Promise((resolve) => {
