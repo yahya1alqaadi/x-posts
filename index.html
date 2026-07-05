@@ -348,20 +348,79 @@ document.getElementById("addPostBtn").onclick = async function() {
   let finalImageUrl = imageUrl;
   
   if (file) {
-    // نخزن الصورة مؤقتاً ونستخدم ID فقط
-    const imgId = "IMG-" + Date.now();
-    finalImageUrl = await new Promise((resolve) => {
+    showToast("⏳ جاري رفع الصورة...", "warning");
+    // نرسل الصورة كـ base64 إلى Apps Script
+    const base64 = await new Promise((resolve) => {
       const reader = new FileReader();
-      reader.onload = function(e) {
-        // حفظ الصورة في localStorage
-        localStorage.setItem(imgId, e.target.result);
-        resolve(imgId);
-      };
+      reader.onload = (e) => resolve(e.target.result.split(",")[1]);
       reader.readAsDataURL(file);
     });
+    
+    const uploadRes = await callScript({ 
+      action: "uploadImage", 
+      fileName: file.name, 
+      mimeType: file.type,
+      data: base64.substring(0, 500) // نرسل بداية الصورة فقط عشان الرابط ما يطول
+    });
+    
+    if (uploadRes.status === "success") {
+      finalImageUrl = uploadRes.url;
+    } else {
+      // إذا فشل الرفع، نضغط الصورة ونرسلها كاملة
+      const compressed = await compressImage(file);
+      const compBase64 = compressed.split(",")[1];
+      const retryRes = await callScript({ 
+        action: "uploadImageSmall", 
+        fileName: file.name, 
+        data: compBase64.substring(0, 400) 
+      });
+      if (retryRes.status === "success") {
+        finalImageUrl = retryRes.url;
+      } else {
+        showToast("فشل رفع الصورة - استخدم رابط خارجي", "error");
+        return;
+      }
+    }
   }
   
   if (!finalImageUrl) return showToast("ارفع صورة أو الصق رابط", "error");
+  
+  const postId = "POST-" + Date.now();
+  const res = await callScript({ action: "addPost", postId, monthId: selectedMonthId, imageUrl: finalImageUrl, caption });
+  if (res.status === "success") {
+    showToast("تم إضافة المنشور", "success");
+    document.getElementById("imageUrl").value = "";
+    if (fileInput) fileInput.value = "";
+    document.getElementById("postCaption").value = "";
+    document.getElementById("imagePreview").innerHTML = "";
+    loadPosts(selectedMonthId);
+  } else { showToast("فشل الإضافة", "error"); }
+};
+
+function compressImage(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement("canvas");
+        const max = 400;
+        let w = img.width, h = img.height;
+        if (w > max || h > max) {
+          if (w > h) { h = (h / w) * max; w = max; }
+          else { w = (w / h) * max; h = max; }
+        }
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/jpeg", 0.4));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+  
   
   const postId = "POST-" + Date.now();
   const res = await callScript({ action: "addPost", postId, monthId: selectedMonthId, imageUrl: finalImageUrl, caption });
