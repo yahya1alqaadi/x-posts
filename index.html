@@ -260,7 +260,13 @@
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 2500);
   }
-
+function getFullUrl(url) {
+  if (!url) return "";
+  if (url.startsWith("DRIVE:")) {
+    return "https://lh3.googleusercontent.com/d/" + url.replace("DRIVE:", "") + "=w500";
+  }
+  return url;
+}
   function callScript(params) {
     return new Promise((resolve, reject) => {
       const cb = "cb_" + Date.now();
