@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <header class="header">
+  <button class="btn btn-outline btn-sm" id="darkToggle" style="position:absolute;left:16px;" title="الوضع الليلي">🌙</button>
+  <h1><i class="fab fa-x-twitter"></i> مراجعة المحتوى</h1>
+</header>
   <style>
     :root {
       --primary: #1d9bf0;
@@ -255,6 +259,20 @@
       from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
       to { transform: translateX(-50%) translateY(0); opacity: 1; }
     }
+    body.dark-mode {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+body.dark-mode .card { background: #1e293b; border-color: #334155; }
+body.dark-mode .header { background: #1e293b; border-color: #334155; color: #f1f5f9; }
+body.dark-mode .tweet-card { background: #1e293b; border-color: #334155; }
+body.dark-mode .tweet-caption { color: #e2e8f0; }
+body.dark-mode .tweet-actions-bar { border-color: #334155; color: #94a3b8; }
+body.dark-mode .tweet-user-handle { color: #94a3b8; }
+body.dark-mode .tweet-user-name { color: #f1f5f9; }
+body.dark-mode .month-card { background: #1e293b; border-color: #334155; }
+body.dark-mode .btn-outline { background: #334155; border-color: #475569; color: #e2e8f0; }
+body.dark-mode .back-btn { background: #334155; color: #e2e8f0; }
   </style>
 </head>
 <body>
@@ -397,7 +415,21 @@ function getFullUrl(url) {
     if (monthId) selectMonth(monthId);
     showToast("📝 تم إضافة الملاحظة", "success");
   }
-
+const darkToggle = document.getElementById("darkToggle");
+if (localStorage.getItem("darkMode") === "enabled") {
+  document.body.classList.add("dark-mode");
+  darkToggle.textContent = "☀️";
+}
+darkToggle.onclick = function() {
+  document.body.classList.toggle("dark-mode");
+  if (document.body.classList.contains("dark-mode")) {
+    localStorage.setItem("darkMode", "enabled");
+    darkToggle.textContent = "☀️";
+  } else {
+    localStorage.setItem("darkMode", "disabled");
+    darkToggle.textContent = "🌙";
+  }
+};
   loadMonths();
 </script>
 </body>
