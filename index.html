@@ -403,21 +403,26 @@ document.getElementById("addPostBtn").onclick = async function() {
   if (!uploadedImage) return showToast("ارفع صورة", "error");
   const caption = document.getElementById("postCaption").value.trim();
   const postId = "POST-" + Date.now();
-  const res = await callScript({ 
-    action: "addPost", 
-    postId: postId, 
-    monthId: selectedMonthId, 
-    imageUrl: uploadedImage, 
-    caption: caption 
-  });
-  if (res.status === "success") {
-    showToast("تم إضافة المنشور", "success");
-    document.getElementById("postCaption").value = "";
-    document.getElementById("imagePreview").innerHTML = "";
-    uploadedImage = null;
-    loadPosts(selectedMonthId);
-  } else {
-    showToast("فشل الإضافة", "error");
+  
+  try {
+    const res = await callScript({ 
+      action: "addPost", 
+      postId: postId, 
+      monthId: selectedMonthId, 
+      imageUrl: "data:image/jpeg;base64," + uploadedImage.split(",")[1], 
+      caption: caption 
+    });
+    if (res.status === "success") {
+      showToast("تم إضافة المنشور", "success");
+      document.getElementById("postCaption").value = "";
+      document.getElementById("imagePreview").innerHTML = "";
+      uploadedImage = null;
+      loadPosts(selectedMonthId);
+    } else {
+      showToast("فشل: " + (res.message || "خطأ غير معروف"), "error");
+    }
+  } catch(e) {
+    showToast("خطأ في الاتصال", "error");
   }
 };
 
