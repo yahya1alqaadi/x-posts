@@ -427,6 +427,7 @@ function compressImage(file) {
           <button class="btn btn-sm btn-warning" onclick="editPost('${p.postId}')"><i class="fas fa-edit"></i></button>
           <button class="btn btn-sm btn-outline" onclick="addAdminNote('${p.postId}')">✏️</button>
           <button class="btn btn-sm btn-danger" onclick="deletePost('${p.postId}')"><i class="fas fa-trash"></i></button>
+          <button class="btn btn-sm btn-outline" onclick="resetPost('${p.postId}')"><i class="fas fa-undo"></i></button>
         </td>
       </tr>
     `).join("");
@@ -482,6 +483,12 @@ darkToggle.onclick = function() {
     darkToggle.textContent = "🌙";
   }
 };
+  async function resetPost(postId) {
+  if (!confirm("إعادة تعيين المنشور إلى قيد المراجعة؟")) return;
+  await callScript({ action: "resetPost", postId });
+  loadPosts(selectedMonthId);
+  showToast("🔄 تم إعادة التعيين", "success");
+}
   loadMonths();
   
 </script>
