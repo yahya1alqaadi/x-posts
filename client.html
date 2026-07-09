@@ -358,7 +358,7 @@ function getFullUrl(url) {
     document.getElementById("postsSection").style.display = "none";
   }
 
-  function renderPosts() {
+function renderPosts() {
     document.getElementById("postsContainer").innerHTML = posts.map(p => `
       <div class="tweet-card">
         <div class="tweet-header">
@@ -386,14 +386,16 @@ function getFullUrl(url) {
             <button class="btn btn-approve" onclick="updateStatus('${p.postId}','approved')"><i class="fas fa-check"></i> اعتماد</button>
             <button class="btn btn-reject" onclick="updateStatus('${p.postId}','rejected')"><i class="fas fa-times"></i> رفض</button>
             <button class="btn btn-note" onclick="addClientNote('${p.postId}')"><i class="fas fa-pen"></i> ملاحظة</button>
-          ` : ''}
+          ` : `
+            <button class="btn btn-outline btn-sm" onclick="resetPost('${p.postId}')" style="margin-top:4px;"><i class="fas fa-undo"></i> إعادة تعيين</button>
+          `}
         </div>
       </div>
     `).join("");
   }
 function getFullUrl(url) {
   if (url && url.startsWith("DRIVE:")) {
-    return "https://lh3.googleusercontent.com/d/" + url.replace("DRIVE:", "") + "=w500";
+    return "https://lh3.googleusercontent.com/d/" + url.replace("DRIVE:", "") + "=s0";
   }
   return url;
 }
@@ -428,6 +430,13 @@ darkToggle.onclick = function() {
     darkToggle.textContent = "🌙";
   }
 };
+  async function resetPost(postId) {
+  if (!confirm("إعادة تعيين المنشور إلى قيد المراجعة؟")) return;
+  await callScript({ action: "resetPost", postId });
+  const monthId = posts[0]?.monthId;
+  if (monthId) selectMonth(monthId);
+  showToast("🔄 تم إعادة التعيين", "success");
+}
   loadMonths();
 </script>
 </body>
