@@ -368,7 +368,7 @@ function getFullUrl(url) {
             <div class="tweet-user-handle">@official</div>
           </div>
         </div>
-        ${p.caption ? `<div class="tweet-caption">${p.caption}</div>` : ''}
+        ${p.caption ? `<div class="tweet-caption">${p.caption.replace(/\n/g, '<br>')}</div>` : ''}
        <img src="${getFullUrl(p.imageUrl)}" class="tweet-image" alt="منشور" />
         <div class="tweet-actions-bar">
           <span><i class="far fa-comment"></i> 0</span>
