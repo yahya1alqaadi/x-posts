@@ -342,7 +342,7 @@ function getFullUrl(url) {
       </div>
     `).join("");
   }
-
+  
   async function selectMonth(monthId) {
     const res = await callScript({ action: "getPosts", monthId });
     if (res.status === "success") {
@@ -362,12 +362,14 @@ function renderPosts() {
     document.getElementById("postsContainer").innerHTML = posts.map(p => `
       <div class="tweet-card">
         <div class="tweet-header">
-          <div class="tweet-avatar">X</div>
-          <div class="tweet-user-info">
-            <div class="tweet-user-name">مهلة</div>
-            <div class="tweet-user-handle">@official</div>
-          </div>
-        </div>
+  <div class="tweet-avatar">
+    <img src="https://lh3.googleusercontent.com/d/1ZSpf_qmvI-7L7pBZQE-qxTYR7jhYtISZ=w200" style="width:48px;height:48px;border-radius:50%;object-fit:cover;" />
+  </div>
+  <div class="tweet-user-info">
+    <div class="tweet-user-name">مُهلة | Muhlah</div>
+    <div class="tweet-user-handle">@Muhlah_sa</div>
+  </div>
+</div>
         ${p.caption ? `<div class="tweet-caption">${p.caption.replace(/\n/g, '<br>')}</div>` : ''}
        <img src="${getFullUrl(p.imageUrl)}" class="tweet-image" alt="منشور" />
         <div class="tweet-actions-bar">
